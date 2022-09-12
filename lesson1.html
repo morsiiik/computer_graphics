@@ -1,0 +1,43 @@
+<HTML>
+<BODY>
+<canvas id='lab01' width='700' height='700' style="border:1px solid">
+</canvas>
+<script>
+	var canvas = document.getElementById('lab01');
+	var ctx = canvas.getContext('2d');
+
+	var i = 0;
+  var j = 0;
+	var direction = 1;
+
+	document.addEventListener("keydown", function(event) {
+			if (event.code == "ArrowRight") {
+				direction = 1;
+			} else if (event.code == "ArrowLeft") {
+				direction = -1;
+			}
+		});
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#F00FFF";
+    ctx.fillStyleRect(300-i, 300-i, 100+2*i, 100+2*i);
+    i += 2;
+  }
+  function erase_draw() {
+
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000000";
+    ctx.strokeRect(300-j, 300-j, 100+2*j, 100+2*j);
+    j += 2;
+
+  }
+
+	setInterval(function(){
+    draw();
+
+  }, 20)
+
+
+</script>
+</BODY>
+</HTML>
