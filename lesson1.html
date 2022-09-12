@@ -1,41 +1,67 @@
 <HTML>
+  <head>
+  <style>
+   body {
+    background: #222; /* Цвет фона */
+   }
+  </style>
+ </head>
 <BODY>
-<canvas id='lab01' width='700' height='700' style="border:1px solid">
+<canvas id='lab01' width='700' height='400' style="border:1px solid">
 </canvas>
 <script>
 	var canvas = document.getElementById('lab01');
 	var ctx = canvas.getContext('2d');
 
 	var i = 0;
-  var j = 0;
-	var direction = 1;
+  var j = -300;
+  var k = -600;
 
-	document.addEventListener("keydown", function(event) {
-			if (event.code == "ArrowRight") {
-				direction = 1;
-			} else if (event.code == "ArrowLeft") {
-				direction = -1;
-			}
-		});
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#F00FFF";
-    ctx.fillStyleRect(300-i, 300-i, 100+2*i, 100+2*i);
-    i += 2;
-  }
-  function erase_draw() {
-
-    //ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#000000";
-    ctx.strokeRect(300-j, 300-j, 100+2*j, 100+2*j);
-    j += 2;
+  function draw(){
+    ctx.fillStyle = "#FCCFFF";
+    ctx.fillRect(300-i, 150-i, 100+2*i, 100+2*i);
 
   }
-
+  function blue_draw() {
+    ctx.fillStyle = "#44AAFF";
+    ctx.fillRect(300-j, 150-j, 100+2*j, 100+2*j);
+  }
+  function green_draw() {
+    ctx.fillStyle = "#00FF00"
+    ctx.fillRect(0, 300, 2*k, 2*k);
+  }
+  function circle_draw(name, pos) {
+    ctx.beginPath();
+	  ctx.arc(350, 300, 200-pos, 50, 90, false);
+	  ctx.fillStyle = name;
+	  ctx.fill();
+	  ctx.lineWidth = 1;
+	  ctx.stroke();
+  }
 	setInterval(function(){
     draw();
+    j+=2
+    i += 2;
+    k+=2;
+    if (j>0) {
+          blue_draw();
+    }
+    if (k>50) {
+    green_draw();
+  }
+  if (k>400) {
+    circle_draw('red', 0);
+    circle_draw('orange', 20);
+    circle_draw('yellow', 40);
+    circle_draw('green', 60);
+    circle_draw('#4455FF', 80);
+    circle_draw('blue', 100);
+    circle_draw('purple', 120);
+    circle_draw('#44AAFF', 140);
+    green_draw()
+  }
 
-  }, 20)
+}, 15)
 
 
 </script>
