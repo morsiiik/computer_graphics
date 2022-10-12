@@ -1,0 +1,42 @@
+<HTML>
+  <head>
+  <style>
+   body {
+    #background: #323232; /* Цвет фона */
+   }
+  </style>
+ </head>
+<BODY>
+<canvas id='lab01' width='700' height='400' style="border:1px solid">
+</canvas>
+<script>
+    var canvas = document.getElementById('lab01');
+	  var ctx = canvas.getContext('2d');
+
+    var r = 150;
+    var x0 = 450;
+    var y0 = 150;
+
+    var F = -2*r + 1;
+    var xc = -r;
+    var yc = 0;
+
+    while (Math.abs(xc)>Math.abs(yc)) {
+      ctx.fillRect(xc+x0, yc+y0, 1,1);
+      ctx.fillRect(xc-x0,yc-y0,1,1)
+      ctx.fillRect(xc+x0,yc-y0,1,1)
+      ctx.fillRect(xc-x0,yc+y0,1,1)
+
+      if (F<0) {
+        F+=4*yc+6;
+      }
+      else {
+        F+= 4*xc + 4*yc + 10;
+        ++xc;
+      }
+      ++yc;
+    }
+
+</script>
+</BODY>
+</HTML>

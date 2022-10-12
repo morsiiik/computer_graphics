@@ -1,0 +1,71 @@
+<HTML>
+  <head>
+  <style>
+   body {
+    background: #323232; /* Цвет фона */
+   }
+  </style>
+ </head>
+<BODY>
+<canvas id='lab01' width='700' height='400' style="border:1px solid">
+</canvas>
+<script>
+    var canvas = document.getElementById('lab01');
+	  var ctx = canvas.getContext('2d');
+    var i = 50;
+    var j = 600;
+
+    var width = canvas.width;
+    var height = canvas.height;
+    var x = 50;
+    var y = 20;
+function draw_red(imgData) {
+  //var imgData = ctx.getImageData(0, 0, width, height);
+  for (var i = 0; i<50; i++) {
+    for (var j = 0; j<50; j++) {
+    var it = (i*width+j)*4;
+    imgData.data[it] = 255;
+    imgData.data[it+1] = 0;
+    imgData.data[it+2] = 0;
+
+    imgData.data[it+3] = 255;
+
+    var it2 = ((i-0)*width+j-10)*4;
+    imgData.data[it2] = 255;
+    imgData.data[it2+1] = 0;
+    imgData.data[it2+2] = 0;
+    imgData.data[it2+3] = 0;
+  }
+    // wait(100);
+  }
+  //ctx.putImageData(imgData, 0, 0);
+}
+function draw_black(imgData) {
+  for (var i = 0; i<50; i++) {
+    for (var j = 0; j<50; j++) {
+    var it = (i*width+j)*4;
+    // imgData.data[it] = 32;
+    // imgData.data[it+1] = 32;
+    // imgData.data[it+2] = 32;
+    imgData.data[it+3] = 0;
+  }
+    // wait(100);
+  }
+}
+  var imgData = ctx.getImageData(0, 0, width, height);
+  setInterval(function() {
+
+    draw_red(imgData)
+     x++;
+     y++;
+    ctx.putImageData(imgData, x+10, y+10);
+    //draw_black(imgData)
+
+
+  }, 10)
+
+
+
+</script>
+</BODY>
+</HTML>
