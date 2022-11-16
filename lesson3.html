@@ -12,20 +12,20 @@
 <script>
     var canvas = document.getElementById('lab01');
 	  var ctx = canvas.getContext('2d');
-
-    var x0 = 10;
-    var y0 = 100;
-    var x1 = 500;
-    var y1 = 300;
+    var x0 = 0;
+    var y0 = 0;
+    var x1 = 179;
+    var y1 = 101;
     var E = 0;
     var y = 0;
-    for (var i = x0; i<x1; ++i) {
+    for (var i = x0; i<=x1; ++i) {
       E += 2*(y1-y0);
       if (E > (x1 - x0)) {
         ++y;
         E-= 2*(x1-x0);
       }
       ctx.fillRect(i,y,1,1)
+      console.log(i, y, E)
     }
 
 </script>

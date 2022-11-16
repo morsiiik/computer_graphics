@@ -13,7 +13,7 @@
     var canvas = document.getElementById('lab01');
 	  var ctx = canvas.getContext('2d');
 
-    var r = 150;
+    var r = 50;
     var x0 = 450;
     var y0 = 150;
 
@@ -23,10 +23,7 @@
 
     while (Math.abs(xc)>Math.abs(yc)) {
       ctx.fillRect(xc+x0, yc+y0, 1,1);
-      ctx.fillRect(xc-x0,yc-y0,1,1)
-      ctx.fillRect(xc+x0,yc-y0,1,1)
-      ctx.fillRect(xc-x0,yc+y0,1,1)
-
+      console.log(xc+x0, yc+y0, F)
       if (F<0) {
         F+=4*yc+6;
       }
