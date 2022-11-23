@@ -1,38 +1,54 @@
 <HTML>
-  <head>
-  <style>
-   body {
-    #background: #323232; /* Цвет фона */
-   }
-  </style>
- </head>
+    <head>
+    <style>
+        body {
+            background: #323232; /* Цвет фона */
+        }
+    </style>
+    </head>
 <BODY>
-<canvas id='lab01' width='700' height='400' style="border:1px solid">
+<canvas id='lab04' width='700' height='400' style="border:1px solid">
 </canvas>
 <script>
-    var canvas = document.getElementById('lab01');
-	  var ctx = canvas.getContext('2d');
+    var canvas = document.getElementById('lab04');
+    var ctx = canvas.getContext('2d');
 
-    var r = 50;
-    var x0 = 450;
-    var y0 = 150;
+    ctx.fillStyle = "#FCCFFF";
 
-    var F = -2*r + 1;
-    var xc = -r;
-    var yc = 0;
+    function draw(x, y, r) {
 
-    while (Math.abs(xc)>Math.abs(yc)) {
-      ctx.fillRect(xc+x0, yc+y0, 1,1);
-      console.log(xc+x0, yc+y0, F)
-      if (F<0) {
-        F+=4*yc+6;
-      }
-      else {
-        F+= 4*xc + 4*yc + 10;
-        ++xc;
-      }
-      ++yc;
+        var tmp_x = x;
+        var tmp_y = y;
+        x = 0;
+        y = r;
+        var d = (1 - 2 * r);
+        var e = 0;
+        while (y >= 0) {
+            ctx.fillRect(tmp_x + x, tmp_y + y, 1, 1);
+            ctx.fillRect(tmp_x + x, tmp_y - y, 1, 1);
+            ctx.fillRect(tmp_x - x, tmp_y + y, 1, 1);
+            ctx.fillRect(tmp_x - x, tmp_y - y, 1, 1);
+
+            e = 2 * (d + y) - 1;
+            if ((d < 0) && (e <= 0)) {
+                x += 1;
+                d = d + (2 * x + 1);
+                continue
+            }
+            e = 2 * (d - x) - 1;
+            if ((d > 0) && (e > 0)) {
+                y -= 1;
+                d = d + (1 - 2 * y);
+                continue
+            }
+            x += 1;
+            d = d + (2 * (x - y));
+            y -= 1
+        }
     }
+
+    var r = 100, x = 300, y = 200;
+    draw(x, y, r)
 
 </script>
 </BODY>

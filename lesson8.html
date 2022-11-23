@@ -1,0 +1,111 @@
+<HTML>
+  <head>
+  <style>
+   body {
+    background: #FF99FF; /* Цвет фона */
+   }
+  </style>
+ </head>
+<BODY>
+<canvas id='lesson8' width='1000' height='500' style="border:1px solid" tabindex='1'/>
+
+<script>
+    let canvas = document.getElementById("lesson8");
+    let context = canvas.getContext("2d");
+
+    function get_point(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y) {
+        var temp1_x = point_one_x * 1 / 2 + point_two_x * 1 / 2;
+        var temp1_y = point_one_y * 1 / 2 + point_two_y * 1 / 2;
+        var temp2_x = point_two_x * 1 / 2 + point_three_x * 1 / 2;
+        var temp2_y = point_two_y * 1 / 2 + point_three_y * 1 / 2;
+        var point_y = temp1_y * 1 / 2 + temp2_y * 1 / 2;
+        var point_x = temp1_x * 1 / 2 + temp2_x * 1 / 2;
+        return [point_x, point_y, temp1_x, temp1_y, temp2_x, temp2_y];
+    }
+
+    function find_d(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y) {
+        var nx = point_three_y - point_one_y;
+        var ny = point_one_x - point_three_x;
+        var d = (point_two_x - point_one_x) * nx + (point_two_y - point_one_y) * ny
+        d /= Math.sqrt(nx * nx + ny * ny)
+        return Math.abs(d);
+    }
+
+    function bezier(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y) {
+        var d = find_d(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y);
+        if (d < 1) {
+            context.beginPath();
+            context.moveTo(point_three_x, point_three_y);
+            context.lineTo(point_one_x, point_one_y);
+            context.stroke();
+            return
+        }
+        var values = get_point(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y);
+        bezier(point_one_x, point_one_y, values[2], values[3], values[0], values[1]);
+        bezier(values[0], values[1], values[4], values[5], point_three_x, point_three_y);
+    }
+
+    function get_a_b_c(array, b_first) {
+        var params = []
+        var b_prev = b_first
+        var b_next = 0;
+        for (let i = 1; i < array.length; i++) {
+            b_next = 2 * (array[i - 1].y - array[i].y) / (array[i - 1].x - array[i].x) - b_prev;
+            c_i = (b_prev - b_next) / (2 * (array[i - 1].x - array[i].x))
+            params.push({a: array[i].y, b: b_next, c: c_i})
+            b_prev = b_next
+        }
+        return params
+    }
+
+    function get_intersect(params, array, b_first) {
+
+        var b_prev = b_first
+        var b_next = params[0].b;
+        var inters = []
+        console.log(params, "params")
+        for (let i = 0; i < params.length; i++) {
+            var l1 = array[i].y - array[i].x * b_prev
+            var l2 = array[i + 1].y - array[i + 1].x * b_next
+            var x = (l2 - l1) / (b_prev - b_next)
+            var y = b_prev * x + l1
+            b_prev = b_next
+            if (i != params.length - 1) {
+                b_next = params[i + 1].b
+            }
+            inters.push({x: x, y: y})
+
+        }
+        console.log(inters, "inters")
+        return inters
+    }
+
+    var points = []
+    canvas.addEventListener("click", function (event) {
+        context.fillStyle = 'black';
+        {
+            const x = event.offsetX;
+            const y = event.offsetY
+            points.push({
+                x: x,
+                y: y
+            })
+            context.fillRect(x, y, 2, 2);
+        }
+        console.log(points)
+    });
+
+
+    canvas.addEventListener("keydown", function (event) {
+        var b_first = 0;
+        var params = get_a_b_c(points, b_first);
+        inters = get_intersect(params, points, b_first)
+        for (let i = 0; i < points.length - 1; i++) {
+            bezier(points[i].x, points[i].y, inters[i].x, inters[i].y, points[i + 1].x, points[i + 1].y);
+        }
+    });
+
+
+</script>
+</BODY>
+</HTML>

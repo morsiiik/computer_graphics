@@ -1,0 +1,119 @@
+
+<HTML>
+  <head>
+  <style>
+   body {
+    background: #323232; /* Цвет фона */
+   }
+  </style>
+ </head>
+<BODY>
+<canvas id='lab07' width='1000' height='700' style='border:2px solid black'/>
+<script>
+    let canvas = document.getElementById("lab07");
+    let ctx = canvas.getContext("2d");
+
+    function line_brezenhem(x0, y0, x_end, y_end, color) {
+        ctx.fillStyle = color;
+        var dx = x_end - x0;
+        var dy = y_end - y0;
+
+        var sign_x = Math.sign(dx);
+        var sign_y = Math.sign(dy);
+
+        var x = x0;
+        var y = y0;
+        var e = 0;
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+            while (x !== x_end) {
+                e += 2 * dy;
+                if (Math.abs(e) >= Math.abs(dx)) {
+                    y += sign_y;
+                    e -= 2 * sign_x * sign_y * dx;
+                }
+                ctx.fillRect(x, y, 2, 2);
+                x += sign_x;
+            }
+        } else {
+            while (y !== y_end) {
+                e += 2 * dx;
+                if (Math.abs(e) >= Math.abs(dy)) {
+                    x += sign_x;
+                    e -= 2 * sign_x * sign_y * dy;
+                }
+                ctx.fillRect(x, y, 2, 2);
+                y += sign_y;
+            }
+        }
+    }
+
+    function get_distance(P0, P1, P2) {
+        let N = Math.sqrt(Math.pow((P1.x - P2.x), 2) + Math.pow((P1.y - P2.y), 2))
+        let k = ((P0.x - P1.x) * (P0.y - P2.y) - (P0.y - P1.y) * (P0.x - P2.x)) / (Math.pow((P0.x - P2.x), 2) - Math.pow((P0.y - P2.y), 2))
+        return Math.abs(k * N)
+    }
+
+    function draw(P0, P1, P2) {
+        if (get_distance(P0, P1, P2) < 1) {
+            line_brezenhem(Math.floor(P0.x), Math.floor(P0.y), Math.floor(P2.x), Math.floor(P2.y), '#FCCFFF')
+            return
+        }
+        let P0_1 = {
+            x: 0,
+            y: 0
+        }
+
+        let P1_1 = {
+            x: 0,
+            y: 0
+        }
+
+        let P0_2 = {
+            x: 0,
+            y: 0
+        }
+
+        P0_1.x = (P0.x + P1.x) * 0.5
+        P0_1.y = (P0.y + P1.y) * 0.5
+        P1_1.x = (P2.x + P1.x) * 0.5
+        P1_1.y = (P2.y + P1.y) * 0.5
+        P0_2.x = (P0_1.x + P1_1.x) * 0.5
+        P0_2.y = (P0_1.y + P1_1.y) * 0.5
+
+        draw(P0, P0_1, P0_2)
+        draw(P0_2, P1_1, P2)
+    }
+
+    let state = 0;
+    canvas.addEventListener("click", function (event) {
+        ctx.fillStyle = 'black';
+        if (state === 0) {
+            P0 = {
+                x: event.offsetX,
+                y: event.offsetY
+            }
+            ctx.fillRect(P0.x, P0.y, 2, 2);
+            state++;
+        } else if (state === 1) {
+            P1 = {
+                x: event.offsetX,
+                y: event.offsetY
+            }
+            ctx.fillRect(P1.x, P1.y, 2, 2);
+            state++;
+        } else if (state === 2) {
+            P2 = {
+                x: event.offsetX,
+                y: event.offsetY
+            }
+            draw(P0, P1, P2)
+            P0 = P2
+            state--;
+        }
+
+    });
+
+</script>
+</BODY>
+</HTML>

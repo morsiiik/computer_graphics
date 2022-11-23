@@ -7,10 +7,10 @@
   </style>
  </head>
 <BODY>
-<canvas id='lab01' width='700' height='400' style="border:1px solid">
+<canvas id='lab02' width='700' height='400' style="border:1px solid">
 </canvas>
 <script>
-    var canvas = document.getElementById('lab01');
+    var canvas = document.getElementById('lab02');
 	  var ctx = canvas.getContext('2d');
     var i = 50;
     var j = 600;
@@ -19,20 +19,17 @@
     var x = 50;
     var y = 100;
 
-function draw_red(imgData) {
-  for (var i = 0; i<50; i++) {
-    for (var j = 70; j>0; j--) {
+function draw(imgData) {
+  for (var i = 1; i<100; i++) {
+    for (var j = 100; j>0; j--) {
     var it = (i*width+j)*4;
     imgData.data[it] = 255;
-    imgData.data[it+1] = 0;
+    imgData.data[it+1] = 110;
     imgData.data[it+2] = 0;
     imgData.data[it+3] = 255;
-
-    var it2 = (i*width+j -10 )*4;
-    imgData.data[it2] = 255;
-    imgData.data[it2+1] = 0;
-    imgData.data[it2+2] = 0;
-    imgData.data[it2+3] = 0;
+    // erase
+    it = (i*width+j -10 )*4;
+    imgData.data[it+3] = 0;
 
   }
   }
@@ -41,9 +38,10 @@ function draw_red(imgData) {
   var imgData = ctx.getImageData(0, 0, width, height);
   setInterval(function() {
 
-    draw_red(imgData)
+    draw(imgData)
      x++;
-    ctx.putImageData(imgData, x, 100);
+     y++
+    ctx.putImageData(imgData, x, y);
 
 
   }, 10)
