@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="myCanvas" width="700" height="700" style="border:1px solid #FFFFFF;"></canvas>
+    <canvas id="myCanvas1" width="700" height="700" style="border:1px solid #FFFFFF;"></canvas>
+    <script>
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+
+        var c1 = document.getElementById("myCanvas1");
+        var ctx1 = c.getContext("2d");
+
+
+        img = new Image;
+        img.src = "http://localhost:8000/png-transparent-keanu-reeves-keanu-reeves-the-matrix-path-of-neo-trinity-agent-smith-matrix-people-fashion-formal-wear.png";
+        
+        img.onload = function() {
+            ctx.drawImage(img, 0, 0);
+            data = ctx.getImageData(0, 0, c.width, c.height);
+        
+            newdata = data;
+
+            for (let i = 1; i < c.height; ++i) {
+                for (let j = 1; j < c.width; ++j) {
+                    let Fx = data.data[((i-1)*c.width+j-1)*4]*(-1) + data.data[((i+1)*c.width+j-1)*4]+
+                    data.data[((i)*c.width+j-1)*4]*(-2) + data.data[((i)*c.width+j+1)*4]*2 +
+                    data.data[((i+1)*c.width+j-1)*4]*(-1) + data.data[((i+1)*c.width+j+1)*4];
+                    
+                    let Fy = data.data[((i-1)*c.width+j-1)*4]*(-1) + data.data[((i+1)*c.width+j-1)*4]*(-1)+
+                    data.data[((i-1)*c.width+j)*4]*(-2) + data.data[((i+1)*c.width+j)*4]*2 +
+                    data.data[((i+1)*c.width+j-1)*4] + data.data[((i+1)*c.width+j+1)*4];
+
+                    newValue = Math.pow(Fx*Fx + Fy*Fy, 0.5);
+                    console.log(newValue);
+                    index = (i*c.width+j)*4;
+                    newdata.data[index] = newValue;
+                    data.data[index+1] = 0;
+                    data.data[index+2] = 0;
+                    data.data[index+3] = 255;
+                }
+            }
+            ctx1.putImageData(newdata, 0, 0);
+
+        }
+        
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<HTML>
+<BODY>
+	<canvas id='lesson01' width='500' height='400'/>
+
+	<script>
+		let canvas = document.getElementById("lesson01");
+		let context = canvas.getContext("2d");
+
+		var r = 200;
+
+		var x0=250;
+		var y0=250;
+
+		var F= -2*r+1;
+		var xc=-r;
+		var yc=0;
+
+		while (Math.abs(xc)>Math.abs(yc)){
+			context.fillRect(xc+x0,yc+y0,1,1);
+			if (F<0){
+				F+=4*yc+6;
+			}
+			else{
+				F+=4*xc+4*yc+10;
+				++xc;
+			}
+			++yc;
+		}
+
+	</script>
+</BODY>
+</HTML>

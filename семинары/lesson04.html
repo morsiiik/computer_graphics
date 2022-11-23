@@ -1,0 +1,53 @@
+<HTML>
+<BODY>
+	<canvas id='lesson01' width='500' height='400'/>
+
+	<script>
+		let canvas = document.getElementById("lesson01");
+		let context = canvas.getContext("2d");
+
+		
+		function get_point(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y) {
+			var temp1_x = point_one_x * 1/2 + point_two_x * 1/2;
+			var temp1_y = point_one_y * 1/2 + point_two_y * 1/2;
+			var temp2_x = point_two_x * 1/2 + point_three_x * 1/2;
+			var temp2_y = point_two_y * 1/2 + point_three_y * 1/2;
+			var point_y = temp1_y * 1/2 + temp2_y * 1/2;
+			var point_x = temp1_x * 1/2 + temp2_x * 1/2;
+			return [point_x, point_y, temp1_x, temp1_y, temp2_x, temp2_y];
+		}
+
+		function find_d(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y) {
+			var nx = point_three_y - point_one_y;
+			var ny = point_one_x - point_three_x;
+			var d = (point_two_x - point_one_x) * nx + (point_two_y - point_one_y) * ny
+			d /= Math.sqrt(nx*nx + ny*ny)
+			return Math.abs(d); 
+		}
+
+		
+
+		function bezier(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y, i) {
+			console.log(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y);
+			i++;
+
+			var d = find_d(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y);
+			if (d < 1) {
+				context.beginPath();
+				context.moveTo(point_three_x,point_three_y);
+				context.lineTo(point_one_x, point_one_y);
+				context.stroke();
+				return
+			}
+			var values = get_point(point_one_x, point_one_y, point_two_x, point_two_y, point_three_x, point_three_y);
+
+			bezier(point_one_x, point_one_y, values[2], values[3], values[0], values[1],i);
+			bezier(values[0], values[1], values[4], values[5], point_three_x, point_three_y,i);
+		}
+
+		bezier(0,0, 0, 100, 200, 200, 0);
+
+
+	</script>
+</BODY>
+</HTML>

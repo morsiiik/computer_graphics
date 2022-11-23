@@ -2,32 +2,80 @@
   <head>
   <style>
    body {
-    #background: #323232; /* Цвет фона */
+    background: #323232; /* Цвет фона */
    }
   </style>
  </head>
 <BODY>
-<canvas id='lab01' width='700' height='400' style="border:1px solid">
+<canvas id='lab03' width='700' height='400' style="border:1px solid">
 </canvas>
 <script>
-    var canvas = document.getElementById('lab01');
-	  var ctx = canvas.getContext('2d');
 
-    var x0 = 10;
-    var y0 = 100;
-    var x1 = 500;
-    var y1 = 300;
-    var E = 0;
-    var y = 0;
-    for (var i = x0; i<x1; ++i) {
-      E += 2*(y1-y0);
-      if (E > (x1 - x0)) {
-        ++y;
-        E-= 2*(x1-x0);
-      }
-      ctx.fillRect(i,y,1,1)
+    function sign(x0, x1)
+    {
+       return (x1-x0)/Math.abs(x1-x0);
+    }
+    function need_swap(x0, y0, x1, y1)
+    {
+        var angle=Math.asin(Math.abs(y0-y1)/Math.sqrt((x0-x1)*(x0-x1)+(y0-y1)*(y0-y1)))*180/Math.PI;
+        if (angle>45 && angle<=90)
+            return true;
+    }
+    function draw(x_start, y_start, x_end, y_end, color)
+    {
+        ctx.fillStyle=color;
+        var E=0;
+        var x=x_start;
+        var y=y_start;
+        if (need_swap(x_start, y_start, x_end, y_end))
+        {
+            while (y!==y_end)
+            {
+                E=E+2*(x_end-x_start);
+                if (Math.abs(E)<Math.abs((y_end-y_start)))
+                {
+                    ctx.fillRect(x, y, 1, 1);
+                }
+                else
+                {
+                    x=x+sign(x_start, x_end);
+                    E=E-2*(y_end-y_start)*sign(x_start, x_end)*sign(x_start, y_end);
+                    ctx.fillRect(x, y, 1, 1);
+                }
+                y=y+sign(y_start, y_end);
+            }
+            return
+        }
+        while (x!==x_end)
+        {
+            E=E+2*(y_end-y_start);
+            if (Math.abs(E)<Math.abs((x_end-x_start)))
+            {
+                ctx.fillRect(x, y, 1, 1);
+            }
+            else
+            {
+                y=y+sign(y_start, y_end);
+                E=E-2*(x_end-x_start)*sign(y_start, y_end)*sign(x_start, x_end);
+                ctx.fillRect(x, y, 1, 1);
+            }
+            x=x+sign(x_start, x_end);
+        }
     }
 
+    function clock(x_begin, y_begin, radius)
+    {
+        var angle=Math.floor(Date.now()%60000/1000)*6+90;
+        var y_end=Math.floor(Math.abs(radius*Math.sin(angle*Math.PI/180)-y_begin));
+        var x_end=Math.floor(Math.abs(radius*Math.cos(angle*Math.PI/180)-x_begin));
+        draw(x_begin, y_begin, x_end, y_end, '#FCCFFF');
+        setTimeout(draw, 1000, x_begin, y_begin, x_end, y_end, '#323232')
+    }
+
+    var canvas=document.getElementById('lab03');
+    var ctx=canvas.getContext('2d');
+    var radius=150, x_begin=300, y_begin=200;
+    setInterval(clock, 100, x_begin, y_begin, radius);
 </script>
 </BODY>
 </HTML>
